@@ -3,6 +3,7 @@ var gamePattern = [];
 var level = 0;
 var progress = 0;
 var max_level = 0;
+var playing = false ;
 
 function nextSequence() {
   var n = Math.floor(Math.random() * 4);
@@ -34,7 +35,8 @@ function playFailAudio() {
 $(document).on('click', ".btn", function() {
   //alert(this.id);
 
-if (level !=0){
+if (level !=0  &&  playing == false){
+     playing = true;
     var colorPlayed = this.id;
 
     $(".btn." + colorPlayed).addClass("pressed");
@@ -52,9 +54,19 @@ if (level !=0){
     } else {
       gameOver();
     }
+    setTimeout(function() {
+      playing = false;
+    }, 200);
+
   }
 });
 
+$("h1").click(function() {
+  if (level == 0 ){
+    fillPattern();
+    $("h1").text("LEVEL " + level);
+  }
+});
 
 $(document).keypress(function(event) {
   if (level == 0 ){
@@ -74,9 +86,10 @@ function checkAnswer(level) {
       playedColors = [];
       progress = 0 ;
       setTimeout(function() {
-        fillPattern();;
+        fillPattern();
       }, 1000);
     }
+
     return true;
   } else {
     return false;
@@ -98,6 +111,6 @@ function gameOver (){
     $("h1").text("PRESS ANY KEY TO RESTART");
   }, 200);
 
-
+playing = false;
 
 }
